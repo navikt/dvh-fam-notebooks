@@ -2,5 +2,7 @@ oracledb >= 1.3.2
 google-api-python-client
 google-cloud-bigquery
 google-cloud-storage
+db_dtypes
 pandas==1.5.3
 google-cloud-secret-manager>=2.16.0
+
