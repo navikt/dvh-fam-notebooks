@@ -2,7 +2,7 @@ oracledb
 google-api-python-client
 google-cloud-bigquery
 #google-cloud-storage
-#db_dtypes
+db_dtypes
 pandas
 google-cloud-secret-manager
 
