@@ -4,8 +4,6 @@ google-cloud-bigquery
 google-cloud-storage
 db_dtypes
 pandas
-google-cloud-secret-manager==2.30.2
+google-cloud-secret-manager
 numpy
 paramiko
-datetime
-io
