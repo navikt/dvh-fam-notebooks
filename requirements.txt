@@ -7,3 +7,4 @@ pandas
 google-cloud-secret-manager
 numpy
 paramiko
+openpyxl
