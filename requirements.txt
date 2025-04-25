@@ -5,6 +5,3 @@ google-cloud-storage
 db_dtypes
 pandas
 google-cloud-secret-manager
-numpy
-paramiko
-openpyxl
