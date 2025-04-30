@@ -1,9 +1,9 @@
 oracledb
 google-api-python-client
-google-cloud-bigquery == 3.23.1
+google-cloud-bigquery
 google-cloud-storage
 db_dtypes
-pandas == 2.1.0
+pandas
 google-cloud-secret-manager
 numpy
 paramiko
