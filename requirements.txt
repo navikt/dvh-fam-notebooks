@@ -3,7 +3,7 @@ google-api-python-client
 google-cloud-bigquery
 google-cloud-storage
 db_dtypes
-pandas
+pandas == 2.1.0
 google-cloud-secret-manager
 numpy
 paramiko
