@@ -1,0 +1,8 @@
+*
+!BT/*.ipynb
+!EF/*.ipynb
+!KS/*.ipynb
+!PP/*.ipynb
+!HM/*.ipynb
+!poetry.lock
+!pyproject.toml
