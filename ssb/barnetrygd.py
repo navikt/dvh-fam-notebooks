@@ -64,6 +64,6 @@ connection = oracledb.connect(user=user, password=oracle_info['password'], dsn=d
 query = "select * from vfam_bt_mottaker_ssb_2025"
 write_header=True
 for chunk in pd.read_sql(query, con=connection, chunksize=10000):
-    chunk.to_csv(os.path.join('s350_bt_mottaker_ssb_2026.csv'), mode='a', index=False, sep=';', encoding='utf-8', header=write_header)
+    chunk.to_csv(os.path.join('s350_bt_mottaker_ssb_2025.csv'), mode='a', index=False, sep=';', encoding='utf-8', header=write_header)
     write_header=False
 
