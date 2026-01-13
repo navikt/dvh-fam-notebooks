@@ -1,69 +1,70 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+"""
+Produsere csv fil med data fra database:
+    Kilde er data fra oracle database
+    Output er csv fil
+    Input parameter: if_mottaker. Verdien er enten 0 eller 1. 1 betyr å produsere csv fil for mottaker.
+                     if_barn. Verdien er enten 0 eller 1. 1 betyr å produsere csv fil for barn.
+"""
 
+import os, oracledb, pandas as pd
+import sys
+from kobling_mot_oracle import oracle_secrets
+import datetime
 
-import os, json, oracledb, pandas as pd
-from google.cloud import secretmanager
-import paramiko
-from io import StringIO
+def generate_csv(if_mottaker: int, if_barn: int):
+    print('generate_csv starter med if_mottaker:',if_mottaker, ', if_barn:',if_barn)
+    """
+    if_mottaker=1 : Produsere csv fil for mottaker
+    if_barn=1     : Produsere csv fil for barn
+    """
+    # Koble opp mot oracle database
+    oracle_info = oracle_secrets()
+    user = oracle_info['user']
+    print('Koble opp mot oracle database med user:', user)
+    dsn_tns = oracledb.makedsn(oracle_info['host'], 1521, service_name = oracle_info['service'])
+    connection = oracledb.connect(user=user, password=oracle_info['password'], dsn=dsn_tns)
+    print('Koblet opp mot oracle database vellykket.')
 
+    import warnings
+    warnings.filterwarnings('ignore') # Slå av unødvendig varsling ved bruk av pd.read_sql 
 
-# In[ ]:
+    if if_mottaker == 1:
+        print('Produsere csv fil for mottaker starter ', datetime.datetime.now())
+        # Tøm filen om det finnes fra før
+        file_path = "s350_bt_mottaker_ssb_2025.csv"
+        with open(file_path, 'w') as f:
+            # Barnetrygd mottaker. Insert alle rader til csv i batch modus.
+            # Skilletegn er semikolon
+            query = "select * from vfam_bt_mottaker_ssb_2025"
+            write_header=True
+            for chunk in pd.read_sql(query, con=connection, chunksize=10000):
+                chunk.to_csv(os.path.join('s350_bt_mottaker_ssb_2025.csv'), mode='a', index=False, sep=';', encoding='utf-8', header=write_header)
+                write_header=False
+        print('Produsere csv fil for mottaker er fullført ', datetime.datetime.now())
+    
+    if if_barn == 1:
+        print('Produsere csv fil for barn starter ', datetime.datetime.now())
+        # Tøm filen om det finnes fra før
+        file_path = "s350_bt_barn_ssb_2025.csv"
+        with open(file_path, 'w') as f:
+            # Barnetrygd barn. Insert alle rader til csv i batch modus.
+            # Skilletegn er semikolon
+            query = "select * from vfam_bt_barn_ssb_2025"
+            write_header=True
+            for chunk in pd.read_sql(query, con=connection, chunksize=10000):
+                chunk.to_csv(os.path.join('s350_bt_barn_ssb_2025.csv'), mode='a', index=False, sep=';', encoding='utf-8', header=write_header)
+                write_header=False
+        print('Produsere csv fil for barn er fullført ', datetime.datetime.now())
 
-def set_secrets_as_envs():
-    from dotenv import load_dotenv
-    load_dotenv()
-    secrets = secretmanager.SecretManagerServiceClient()
-    resource_name = f"{os.environ['KNADA_TEAM_SECRET']}/versions/latest"
-    secret = secrets.access_secret_version(name=resource_name)
-    secret_str = secret.payload.data.decode('UTF-8')
-    secrets = json.loads(secret_str)
-    os.environ.update(secrets)
+def main():
+    if len(sys.argv) > 1:
+        if_mottaker = int(sys.argv[1])
+        if_barn = int(sys.argv[2])
+        print('main starter med if_mottaker:',if_mottaker, ', if_barn:',if_barn)
+        generate_csv(if_mottaker, if_barn)
 
-
-# In[ ]:
-
-
-def oracle_secrets():
-    set_secrets_as_envs()
-    return dict(
-    user = os.getenv("DB_SECRET_USER"),
-    password = os.getenv("DB_SECRET_PASSWORD"),
-    host = os.getenv("DB_ORCL_DSN"),
-    service = os.getenv("DB_ORCL_SERVICE"),
-    encoding = "UTF-8",
-    nencoding = "UTF-8"
-    )
-
-
-# In[ ]:
-
-
-oracle_info = oracle_secrets()
-
-
-# In[ ]:
-
-
-user = oracle_info['user'] + '[DVH_FAM_BT]'
-dsn_tns = oracledb.makedsn(oracle_info['host'], 1521, service_name = oracle_info['service'])
-
-
-# In[ ]:
-
-
-connection = oracledb.connect(user=user, password=oracle_info['password'], dsn=dsn_tns)
-
-
-# In[ ]:
-
-
-# Barnetrygd mottaker Insert alle rader til csv i batch modus
-query = "select * from vfam_bt_mottaker_ssb_2025"
-write_header=True
-for chunk in pd.read_sql(query, con=connection, chunksize=10000):
-    chunk.to_csv(os.path.join('s350_bt_mottaker_ssb_2025.csv'), mode='a', index=False, sep=';', encoding='utf-8', header=write_header)
-    write_header=False
-
+if __name__ == "__main__":
+    main()
