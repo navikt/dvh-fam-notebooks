@@ -9,10 +9,11 @@ import os, json
 from google.cloud import secretmanager
 
 def set_secrets_as_envs():
-    # Kommunikasjon mot Google Cloud Secret Manager
+    # Kommunikasjon mot Google Cloud Secret Manager når kode kjører fra lokal Knast
     # Hent inn oppsett av miljøvariabler
     from dotenv import load_dotenv
     load_dotenv()
+    # Kan droppe load_dotenv når kode kjører fra f.eks. Airflow, men dette er ikke testet.
 
     secrets = secretmanager.SecretManagerServiceClient()
     resource_name = f"{os.environ['KNADA_TEAM_SECRET']}/versions/latest"

@@ -35,7 +35,7 @@ def generate_csv(if_mottaker: int, if_barn: int):
         print('Produsere csv fil for mottaker starter ', datetime.datetime.now())
         # Tøm filen om det finnes fra før
         file_path = "s350_bt_mottaker_ssb_2025.csv"
-        with open(file_path, 'w') as f:
+        with open(file_path, 'w') as f: # with open metode oppretter en ny fil om det ikke finnes, ellers overskriver eksisterende fil
             # Barnetrygd mottaker. Insert alle rader til csv i batch modus.
             # Skilletegn er semikolon
             query = "select * from vfam_bt_mottaker_ssb_2025"
@@ -49,7 +49,7 @@ def generate_csv(if_mottaker: int, if_barn: int):
         print('Produsere csv fil for barn starter ', datetime.datetime.now())
         # Tøm filen om det finnes fra før
         file_path = "s350_bt_barn_ssb_2025.csv"
-        with open(file_path, 'w') as f:
+        with open(file_path, 'w') as f: # with open metode oppretter en ny fil om det ikke finnes, ellers overskriver eksisterende fil
             # Barnetrygd barn. Insert alle rader til csv i batch modus.
             # Skilletegn er semikolon
             query = "select * from vfam_bt_barn_ssb_2025"
