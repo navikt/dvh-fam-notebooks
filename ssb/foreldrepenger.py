@@ -56,7 +56,7 @@ def generate_csv(periode_type: str):
             write_header=True
             query = "select * from vfam_fp_sp_ssb_2024_m"
             df = pd.read_sql(query, con=connection)
-            df.to_csv(file_path, index=False, sep=';', encoding='utf-8', header=write_header)
+            df.to_csv(file_path, index=False, sep=';', encoding='utf-8', header=write_header, date_format='%d%m%Y')
 
         print('Produsere års csv fil er fullført ', datetime.datetime.now())
 
@@ -65,6 +65,8 @@ def main():
         periode_type = sys.argv[1].upper()
         print('main starter med periode_type:',periode_type)
         generate_csv(periode_type)
+    else:
+        print("Oppgi periode_type M eller A. Kode kan være enten", "\033[1m"+"python foreldrepenger.py A"+"\033[0m", "eller", "\033[1m"+"python foreldrepenger.py M"+"\033[0m")
 
 if __name__ == "__main__":
     main()
