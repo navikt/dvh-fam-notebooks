@@ -6,6 +6,7 @@ Produsere csv fil med data fra database:
     Kilde er data fra oracle database
     Output er csv fil
     Input parameter: periode_type. Verdien er enten M eller A. M produserer 12 måneds csv-filer, og A produserer en års csv-fil.
+                     Tilsvarende kommandolinje til å starte produsering er enten python foreldrepenger.py M eller python foreldrepenger.py A.
 """
 
 import os, oracledb, pandas as pd
@@ -38,25 +39,25 @@ def generate_csv(periode_type: str):
                 maaned = '0' + maaned
             print('Produsere måned', maaned, 'csv fil starter ', datetime.datetime.now())
 
-            file_path = "s350_fp_sp_ssb_2025_m" + maaned + ".csv"
+            file_path = "S350_FP_SP_SSB_2025_M" + maaned + ".csv"
             with open(file_path, 'w') as f: # with open metode oppretter en ny fil om det ikke finnes, ellers overskriver eksisterende fil
                 # Skilletegn er semikolon
                 write_header=True
-                query = "select * from vfam_fp_sp_ssb_2024_m where stat_aarmnd = 2024" + maaned
+                query = "select * from vfam_fp_sp_ssb_2025_m where stat_aarmnd = 2025" + maaned
                 df = pd.read_sql(query, con=connection)
-                df.to_csv(file_path, index=False, sep=';', encoding='utf-8', header=write_header)
+                df.to_csv(file_path, index=False, sep=';', encoding='utf-8', header=write_header, date_format='%Y%m%d')
 
             print('Produsere måned', maaned, 'csv fil er fullført ', datetime.datetime.now())
     
     if periode_type == 'A':
         print('Produsere års csv fil starter ', datetime.datetime.now())
-        file_path = "s350_fp_sp_ssb_2025_a.csv"
+        file_path = "S350_FP_SP_SSB_2025_A.csv"
         with open(file_path, 'w') as f: # with open metode oppretter en ny fil om det ikke finnes, ellers overskriver eksisterende fil
             # Skilletegn er semikolon
             write_header=True
-            query = "select * from vfam_fp_sp_ssb_2024_m"
+            query = "select * from vfam_fp_sp_ssb_2025_a"
             df = pd.read_sql(query, con=connection)
-            df.to_csv(file_path, index=False, sep=';', encoding='utf-8', header=write_header, date_format='%d%m%Y')
+            df.to_csv(file_path, index=False, sep=';', encoding='utf-8', header=write_header, date_format='%Y%m%d')
 
         print('Produsere års csv fil er fullført ', datetime.datetime.now())
 
