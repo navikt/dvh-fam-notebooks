@@ -34,28 +34,28 @@ def generate_csv(if_mottaker: int, if_barn: int):
     if if_mottaker == 1:
         print('Produsere csv fil for mottaker starter ', datetime.datetime.now())
         # Tøm filen om det finnes fra før
-        file_path = "s350_bt_mottaker_ssb_2025.csv"
+        file_path = "S350_BT_MOTTAKER_SSB_2025.csv"
         with open(file_path, 'w') as f: # with open metode oppretter en ny fil om det ikke finnes, ellers overskriver eksisterende fil
             # Barnetrygd mottaker. Insert alle rader til csv i batch modus.
             # Skilletegn er semikolon
             query = "select * from vfam_bt_mottaker_ssb_2025"
             write_header=True
             for chunk in pd.read_sql(query, con=connection, chunksize=10000):
-                chunk.to_csv(os.path.join('s350_bt_mottaker_ssb_2025.csv'), mode='a', index=False, sep=';', encoding='utf-8', header=write_header, date_format='%Y%m%d')
+                chunk.to_csv(os.path.join(file_path), mode='a', index=False, sep=';', encoding='utf-8', header=write_header, date_format='%Y%m%d')
                 write_header=False
         print('Produsere csv fil for mottaker er fullført ', datetime.datetime.now())
     
     if if_barn == 1:
         print('Produsere csv fil for barn starter ', datetime.datetime.now())
         # Tøm filen om det finnes fra før
-        file_path = "s350_bt_barn_ssb_2025.csv"
+        file_path = "S350_BT_BARN_SSB_2025.csv"
         with open(file_path, 'w') as f: # with open metode oppretter en ny fil om det ikke finnes, ellers overskriver eksisterende fil
             # Barnetrygd barn. Insert alle rader til csv i batch modus.
             # Skilletegn er semikolon
             query = "select * from vfam_bt_barn_ssb_2025"
             write_header=True
             for chunk in pd.read_sql(query, con=connection, chunksize=10000):
-                chunk.to_csv(os.path.join('s350_bt_barn_ssb_2025.csv'), mode='a', index=False, sep=';', encoding='utf-8', header=write_header, date_format='%Y%m%d')
+                chunk.to_csv(os.path.join(file_path), mode='a', index=False, sep=';', encoding='utf-8', header=write_header, date_format='%Y%m%d')
                 write_header=False
         print('Produsere csv fil for barn er fullført ', datetime.datetime.now())
 
