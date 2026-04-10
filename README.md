@@ -1,4 +1,4 @@
-# dvh-fam-notebooks
+# dvh-fam-notebooks  
 et repo som inneholder jupyter notebook-er for team familie
 
 ## Pre-commit (for notebooks)
@@ -7,12 +7,19 @@ Vi bruker pre-commit for å sikre at notebooks ikke pusher output (print) til gi
 
 Dette gjør at ingen sensetive/personlige data kommer på avvei ved et uheld.
 
-### Oppsett
-
-en .pre-commit-config.yaml fil ble opprettet og er en del av repoet nå.
-
-Kjør dette én gang etter at du har clonet repoet:
+### Oppsett (må gjøres én gang)
+`.pre-commit-config.yaml` ligger allerede i repoet.
+Kjør dette én gang etter at du har klonet repoet:
 
 ```bash
-(uv) pip install pre-commit
+uv pip install pre-commit
 pre-commit install
+```
+
+### Første gang du bruker det
+Hvis pre-commit endrer filer under commit, kjør:
+
+```bash
+git add .
+git commit -m "re-commit etter pre-commit cleanup"
+```
